@@ -1,0 +1,127 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    name_cms: "wordpress"
+    name_db: "mariadb"
+    name_docker_net: "wordpress-network" 
+
+  tasks:
+    - name: Сheck host
+      shell: |
+        hostname
+        printf "\n"
+        ip addr
+      register: out
+    - name: Show host
+      debug:
+        msg: "{{ out.stdout_lines }}"
+
+    - name: Make sure firewalld is enabled
+      systemd:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Configure firewalld
+      firewalld:
+        zone: public
+        service: "{{ item }}"
+        state: enabled
+        permanent: yes
+        immediate: yes
+      with_items:
+        - http
+        - https
+      
+    - name: Test run docker
+      shell: |
+        systemctl is-active docker
+        exit 0
+      args:
+        executable: /bin/bash
+      register: output
+
+    - debug:
+        msg: "{{ output.stdout_lines }}"
+
+    - name: If docker is inactive -> Install doker
+      include_role:
+        name: docker
+        tasks_from: main
+      when: (output.stdout == "unknown") or
+            (output.stdout == "inactive")
+
+    - name: Show docker networks present
+      shell: |
+        docker network ls
+        exit 0
+      args:
+        executable: /bin/bash
+      register: output
+
+    - debug:
+        msg: "{{ output.stdout_lines }}"
+
+    - name: Rollback and backup user data
+      include_role:
+        name: rollback
+        tasks_from: rollback
+
+    - name: add docker network
+      shell: |
+        docker network create {{ name_docker_net }}
+      args:
+        executable: /bin/bash
+      when: 'not "{{ name_docker_net }}" in output.stdout'
+
+    - name: Create a directory wordpress
+      file:
+        path: /data/wordpress
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: 0755
+
+    - name: Create a directory mariadb
+      file:
+        path: /data/mariadb
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: 0755
+
+    - name: Create a directory backup
+      file:
+        path: /data/backups
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: 0755
+
+    - name: docker run mariadb
+      shell: |
+        docker volume create --name mariadb_data
+        docker run -d --name mariadb \
+        --env ALLOW_EMPTY_PASSWORD=yes \
+        --env MARIADB_USER=bn_wordpress \
+        --env MARIADB_DATABASE=bitnami_wordpress \
+        --network wordpress-network \
+        --volume mariadb_data:/bitnami/mariadb \
+        bitnami/mariadb:latest
+      args:
+        executable: /bin/bash
+
+    - name: docker run wordpress
+      shell: |
+        docker volume create --name wordpress_data
+        docker run -d --name wordpress \
+        -p 8080:8080 -p 8443:8443 \
+        -e ALLOW_EMPTY_PASSWORD=yes \
+        -e WORDPRESS_DATABASE_USER=bn_wordpress \
+        -e WORDPRESS_DATABASE_NAME=bitnami_wordpress \
+        --network wordpress-network \
+        --volume wordpress_data:/bitnami/wordpress \
+        bitnami/wordpress:latest
+      args:
+        executable: /bin/bash

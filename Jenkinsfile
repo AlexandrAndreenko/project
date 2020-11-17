@@ -1,5 +1,4 @@
 #!groovy
-// Check ub1 properties
 properties([disableConcurrentBuilds()])
 
 pipeline {
@@ -16,8 +15,16 @@ pipeline {
     stages {
         stage("First step") {
             steps {
-                sh 'hostname \'uptime\''
+                sh 'hostname'
+                sh 'uptime'
             }
         }
+        stage('Install docker to target') {
+            steps {
+                ansiblePlaybook(
+                    inventory: 'hosts.yaml',
+                    playbook: 'deploy.yaml'
+                )
+            }
     }
 }
