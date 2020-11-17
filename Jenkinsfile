@@ -16,7 +16,8 @@ pipeline {
     stages {
         stage("First step") {
             steps {
-                sh 'hostname \'uptime\''
+                sh 'hostname'
+                sh 'uptime'
             }
         }
     }
