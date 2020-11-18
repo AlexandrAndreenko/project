@@ -63,11 +63,6 @@
     - debug:
         msg: "{{ output.stdout_lines }}"
 
-    - name: Rollback and backup user data
-      include_role:
-        name: rollback
-        tasks_from: rollback
-
     - name: add docker network
       shell: |
         docker network create {{ name_docker_net }}
