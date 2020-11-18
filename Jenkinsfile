@@ -25,6 +25,7 @@ pipeline {
                     inventory: 'hosts.yaml',
                     playbook: 'deploy.yaml'
                 )
-            }
+            }    
+         }
     }
 }
