@@ -48,7 +48,7 @@
     - name: If docker is inactive -> Install doker
       include_role:
         name: docker
-        tasks_from: main
+        tasks_from: install
       when: (output.stdout == "unknown") or
             (output.stdout == "inactive")
 
