@@ -5,6 +5,8 @@
     name_cms: "wordpress"
     name_db: "mariadb"
     name_docker_net: "wordpress-network" 
+  roles:
+    - docker  
 
   tasks:
     - name: Сheck host
@@ -33,24 +35,6 @@
       with_items:
         - http
         - https
-      
-    - name: Test run docker
-      shell: |
-        systemctl is-active docker
-        exit 0
-      args:
-        executable: /bin/bash
-      register: output
-
-    - debug:
-        msg: "{{ output.stdout_lines }}"
-
-    - name: If docker is inactive -> Install doker
-      include_role:
-        name: docker
-        tasks_from: install
-      when: (output.stdout == "unknown") or
-            (output.stdout == "inactive")
 
     - name: Show docker networks present
       shell: |
