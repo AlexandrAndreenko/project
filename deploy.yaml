@@ -41,7 +41,7 @@
         name: mariadb_data
 
     - name: Create a volume for httpd
-      docker_network:
+      docker_volume:
         name: wordpress_data
 
     - name: Create a directory backup
