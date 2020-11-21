@@ -14,8 +14,8 @@ services:
     depends_on:
       - mariadb
     ports:
-      - '8081:80'
-      - '8443:443'
+      - '8080:8080'
+      - '8443:8443'
     environment:
       - WORDPRESS_USERNAME=admin  
       - WORDPRESS_PASSWORD=Qwerty_13
