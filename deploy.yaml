@@ -80,7 +80,7 @@
 
     - name: Copy docker-compose
       shell: |
-        rsync -avH docker-compose.yml jenkins@192.168.100.1:/var/lib/jenkins
+        rsync -avH docker-compose.yml jenkins@192.168.100.11:/var/lib/jenkins
 
     - name: Run Docker containers
       shell: |
