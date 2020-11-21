@@ -78,29 +78,32 @@
         group: jenkins
         mode: 0755
 
-    - name: docker run mariadb
+    - name: Run Docker containers
       shell: |
-        docker volume create --name mariadb_data
-        docker run -d --name mariadb \
-        --env ALLOW_EMPTY_PASSWORD=yes \
-        --env MARIADB_USER=bn_wordpress \
-        --env MARIADB_DATABASE=bitnami_wordpress \
-        --network wordpress-network \
-        --volume mariadb_data:/bitnami/mariadb \
-        bitnami/mariadb:latest
-      args:
-        executable: /bin/bash
+        docker-compose up -d  
+    #- name: docker run mariadb
+    #  shell: |
+    #    docker volume create --name mariadb_data
+    #    docker run -d --name mariadb \
+    #    --env ALLOW_EMPTY_PASSWORD=yes \
+    #    --env MARIADB_USER=bn_wordpress \
+    #    --env MARIADB_DATABASE=bitnami_wordpress \
+    #    --network wordpress-network \
+    #    --volume mariadb_data:/bitnami/mariadb \
+    #    bitnami/mariadb:latest
+    #  args:
+    #    executable: /bin/bash
 
-    - name: docker run wordpress
-      shell: |
-        docker volume create --name wordpress_data
-        docker run -d --name wordpress \
-        -p 8080:8080 -p 8443:8443 \
-        -e WORDPRESS_PASSWORD=QwertY_13 \
-        -e WORDPRESS_DATABASE_USER=bn_wordpress \
-        -e WORDPRESS_DATABASE_NAME=bitnami_wordpress \
-        --network wordpress-network \
-        --volume wordpress_data:/bitnami/wordpress \
-        bitnami/wordpress:latest
-      args:
-        executable: /bin/bash
+    #- name: docker run wordpress
+    #  shell: |
+    #    docker volume create --name wordpress_data
+    #    docker run -d --name wordpress \
+    #    -p 8080:8080 -p 8443:8443 \
+    #    -env WORDPRESS_PASSWORD=QwertY_13 \
+    #    -env WORDPRESS_DATABASE_USER=bn_wordpress \
+    #    -env WORDPRESS_DATABASE_NAME=bitnami_wordpress \
+    #    --network wordpress-network \
+    #    --volume wordpress_data:/bitnami/wordpress \
+    #    bitnami/wordpress:latest
+    #  args:
+    #    executable: /bin/bash
