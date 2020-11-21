@@ -36,23 +36,23 @@
         - http
         - https
 
-    - name: Show docker networks present
-      shell: |
-        docker network ls
-        exit 0
-      args:
-        executable: /bin/bash
-      register: output
+    #- name: Show docker networks present
+    #  shell: |
+    #    docker network ls
+    #    exit 0
+    #  args:
+    #    executable: /bin/bash
+    #  register: output
 
-    - debug:
-        msg: "{{ output.stdout_lines }}"
+    #- debug:
+    #    msg: "{{ output.stdout_lines }}"
 
-    - name: add docker network
-      shell: |
-        docker network create {{ name_docker_net }}
-      args:
-        executable: /bin/bash
-      when: 'not "{{ name_docker_net }}" in output.stdout'
+    #- name: add docker network
+    #  shell: |
+    #    docker network create {{ name_docker_net }}
+    #  args:
+    #    executable: /bin/bash
+    #  when: 'not "{{ name_docker_net }}" in output.stdout'
 
     - name: Create a directory wordpress
       file:
@@ -78,13 +78,52 @@
         group: jenkins
         mode: 0755
 
-    - name: Copy docker-compose
-      shell: |
-        rsync -avH docker-compose.yml jenkins@192.168.100.11:/var/lib/jenkins
+    - name: Create a volume1
+      docker_volume:
+        name: mariadb_data    
 
-    - name: Run Docker containers
-      shell: |
-        docker-compose -f /var/lib/jenkins/docker-compose.yml up -d  
+    - name: Create a volume2
+      docker_network:
+        name: wordpress_data
+
+    - name: Create a net
+      docker_volume:
+        name: wordpress_network
+
+
+    - name: Launching an HTTPD Containe
+      docker_container:
+        name: apache-server
+        image: bitnami/mariadb
+        state: started
+        environment:
+         - ALLOW_EMPTY_PASSWORD=yes
+         - MARIADB_USER=admin
+         - MARIADB_DATABASE=bitnami_wordpress 
+       volumes: 
+         - mariadb_data:/bitnami
+       network:
+         - wordpress-network  
+
+    - name: Launching an DB Containe
+      docker_container:
+        name: apache-server
+        image: bitnami/wordpress
+        state: started
+        ports:
+         - "8888:80"
+        environment:
+         - WORDPRESS_USERNAME=admin  
+         - WORDPRESS_PASSWORD=Qwerty_13
+         - WORDPRESS_DATABASE_USER=admin
+         - WORDPRESS_DATABASE_NAME=bitnami_wordpress
+         - ALLOW_EMPTY_PASSWORD=yes 
+       volumes: 
+         - wordpress_data:/bitnami
+       network:
+         - wordpress-network           
+
+        
     #- name: docker run mariadb
     #  shell: |
     #    docker volume create --name mariadb_data
