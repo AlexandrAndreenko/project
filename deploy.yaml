@@ -80,7 +80,7 @@
 
     - name: Run Docker containers
       shell: |
-        docker-compose up -d  
+        docker-compose -f /var/lib/jenkins/workspace/project3/docker-compose.yml up -d  
     #- name: docker run mariadb
     #  shell: |
     #    docker volume create --name mariadb_data
