@@ -78,32 +78,36 @@
         group: jenkins
         mode: 0755
 
-    #- name: Run Docker containers
-    #  shell: |
-    #    docker-compose -f /var/lib/jenkins/workspace/project3/docker-compose.yml up -d  
-    - name: docker run mariadb
+    - name: Copy docker-compose
       shell: |
-        docker volume create --name mariadb_data
-        docker run -d --name mariadb \
-        --env ALLOW_EMPTY_PASSWORD=yes \
-        --env MARIADB_USER=bn_wordpress \
-        --env MARIADB_DATABASE=bitnami_wordpress \
-        --network wordpress-network \
-        --volume mariadb_data:/bitnami/mariadb \
-        bitnami/mariadb:latest
-      args:
-        executable: /bin/bash
+        rsync -avH docker-compose.yml jenkins@192.168.100.1:/var/lib/jenkins
 
-    - name: docker run wordpress
+    - name: Run Docker containers
       shell: |
-        docker volume create --name wordpress_data
-        docker run -d --name wordpress \
-        -p 8080:8080 -p 8443:8443 \
-        --env WORDPRESS_PASSWORD=QwertY_13 \
-        --env WORDPRESS_DATABASE_USER=bn_wordpress \
-        --env WORDPRESS_DATABASE_NAME=bitnami_wordpress \
-        --network wordpress-network \
-        --volume wordpress_data:/bitnami/wordpress \
-        bitnami/wordpress:latest
-      args:
-        executable: /bin/bash
+        docker-compose -f /var/lib/jenkins/docker-compose.yml up -d  
+    #- name: docker run mariadb
+    #  shell: |
+    #    docker volume create --name mariadb_data
+    #    docker run -d --name mariadb \
+    #    --env ALLOW_EMPTY_PASSWORD=yes \
+    #    --env MARIADB_USER=bn_wordpress \
+    #    --env MARIADB_DATABASE=bitnami_wordpress \
+    #    --network wordpress-network \
+    #    --volume mariadb_data:/bitnami/mariadb \
+    #    bitnami/mariadb:latest
+    #  args:
+    #    executable: /bin/bash
+
+    #- name: docker run wordpress
+    #  shell: |
+    #    docker volume create --name wordpress_data
+    #    docker run -d --name wordpress \
+    #    -p 8080:8080 -p 8443:8443 \
+    #    --env WORDPRESS_PASSWORD=QwertY_13 \
+    #    --env WORDPRESS_DATABASE_USER=bn_wordpress \
+    #    --env WORDPRESS_DATABASE_NAME=bitnami_wordpress \
+    #    --network wordpress-network \
+    #    --volume wordpress_data:/bitnami/wordpress \
+    #    bitnami/wordpress:latest
+    #  args:
+    #    executable: /bin/bash
