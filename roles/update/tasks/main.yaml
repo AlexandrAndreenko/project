@@ -1,0 +1,43 @@
+    - name: Create a directory wordpress
+      file:
+        path: /data/wordpress
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: 0755
+
+    - name: Create a directory mariadb
+      file:
+        path: /data/mariadb
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: 0755
+
+    - name: Make Backup files
+      synchronize:
+        src: /var/lib/docker/volumes/jenkins_wordpress_data/
+        dest: /data/wordpress
+
+    - name: Make Backup BD
+      synchronize:
+        src: /var/lib/docker/volumes/jenkins_mariadb_data/
+        dest: /data/mariadb/
+
+    - name: Remove containers
+      shell: |
+        docker rm -f $(docker ps -a -q)
+    
+    - name: Copy compose
+      template:
+        src: docker-compose.yml
+        dest: /var/lib/
+        owner: jenkins
+        group: jenkins
+        mode: 0644 
+
+    - name: Run docker-compose up
+      shell: docker-compose up -d
+      args:
+        chdir: /var/lib/    
+

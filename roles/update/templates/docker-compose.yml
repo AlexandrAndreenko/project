@@ -10,7 +10,7 @@ services:
     volumes:
       - mariadb_data:/bitnami
   wordpress:
-    image: 'bitnami/wordpress:5.5.2'
+    image: 'bitnami/wordpress:latest'
     depends_on:
       - mariadb
     ports:
@@ -28,4 +28,4 @@ volumes:
   mariadb_data:
     driver: local
   wordpress_data:
-    driver: local      
+    driver: local  
