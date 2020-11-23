@@ -15,16 +15,19 @@
         mode: 0755
 
     - name: Make Backup files
-      become: yes
-      synchronize:
-        src: /var/lib/docker/volumes/jenkins_wordpress_data/
-        dest: /data/wordpress  
+      shell: sudo rsync -avH /var/lib/docker/volumes/jenkins_wordpress_data/ /data/wordpress/
+    #  become: yes
+    #  synchronize:
+    #    src: /var/lib/docker/volumes/jenkins_wordpress_data/
+    #    dest: /data/wordpress
+       
 
     - name: Make Backup BD
-      become: yes
-      synchronize:
-        src: /var/lib/docker/volumes/jenkins_mariadb_data/
-        dest: /data/mariadb/
+      shell: sudo rsync -avH /var/lib/docker/volumes/jenkins_mariadb_data/ /data/mariadb/
+      #become: yes
+      #synchronize:
+      #  src: /var/lib/docker/volumes/jenkins_mariadb_data/
+      #  dest: /data/mariadb/
 
     - name: Remove containers
       shell: |
