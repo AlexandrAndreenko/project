@@ -31,7 +31,7 @@
     - name: Copy compose
       template:
         src: docker-compose.yml
-        dest: /var/lib/
+        dest: /var/lib/jenkins/
         owner: jenkins
         group: jenkins
         mode: 0644 
