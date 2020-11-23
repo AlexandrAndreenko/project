@@ -16,23 +16,20 @@
 
     - name: Make Backup files
       shell: sudo rsync -avH /data/wordpress/wordpress/ /data/backhttpd/
-    #  become: yes
-    #  synchronize:
-    #    src: /var/lib/docker/volumes/jenkins_wordpress_data/
-    #    dest: /data/wordpress
-       
 
     - name: Make Backup BD
       shell: sudo rsync -avH /data/mariadb/mariadb/ /data/backbd/
-      #become: yes
-      #synchronize:
-      #  src: /var/lib/docker/volumes/jenkins_mariadb_data/
-      #  dest: /data/mariadb/
 
-    - name: Remove containers
-      shell: |
-        docker rm -f $(docker ps -a | grep wordpress)
-    
+    - name: Remove stop containers
+      shell: docker-compose stop wordpress
+      args:
+        chdir: /var/lib/jenkins
+
+    - name: Remove stop containers
+      shell: docker-compose rm wordpress
+      args:
+        chdir: /var/lib/jenkins
+
     - name: Copy compose
       template:
         src: docker-compose.yml
