@@ -8,7 +8,7 @@ services:
       - MARIADB_USER=admin
       - MARIADB_DATABASE=bitnami_wordpress
     volumes:
-      - mariadb_data:/bitnami
+      - /data/mariadb:/bitnami
   wordpress:
     image: 'bitnami/wordpress:latest'
     depends_on:
@@ -23,9 +23,4 @@ services:
       - WORDPRESS_DATABASE_NAME=bitnami_wordpress
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
-      - wordpress_data:/bitnami
-volumes:
-  mariadb_data:
-    - /data/mariadb/
-  wordpress_data:
-    - /data/wordpress/
+      - /data/wordpress:/bitnami
