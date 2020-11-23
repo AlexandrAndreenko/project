@@ -39,5 +39,5 @@
     - name: Run docker-compose up
       shell: docker-compose up -d
       args:
-        chdir: /var/lib/    
+        chdir: /var/lib/jenkins    
 
