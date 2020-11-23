@@ -26,9 +26,7 @@
         chdir: /var/lib/jenkins
 
     - name: Remove stop containers
-      shell: docker-compose rm wordpress
-      args:
-        chdir: /var/lib/jenkins
+      shell: docker rm jenkins_wordpress_1
 
     - name: Copy compose
       template:
