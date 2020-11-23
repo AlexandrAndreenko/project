@@ -31,7 +31,7 @@
 
     - name: Remove containers
       shell: |
-        docker rm -f $(docker ps -a -q)
+        docker rm -f $(docker ps -a | grep wordpress)
     
     - name: Copy compose
       template:
