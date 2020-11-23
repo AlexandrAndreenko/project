@@ -15,7 +15,7 @@
         mode: 0755
 
     - name: Make Backup files
-      shell: sudo rsync -avH /var/lib/docker/volumes/jenkins_wordpress_data/ /data/backhttpd/
+      shell: sudo rsync -avH /data/wordpress/wordpress/ /data/backhttpd/
     #  become: yes
     #  synchronize:
     #    src: /var/lib/docker/volumes/jenkins_wordpress_data/
@@ -23,7 +23,7 @@
        
 
     - name: Make Backup BD
-      shell: sudo rsync -avH /var/lib/docker/volumes/jenkins_mariadb_data/ /data/backbd/
+      shell: sudo rsync -avH /data/mariadb/mariadb/ /data/backbd/
       #become: yes
       #synchronize:
       #  src: /var/lib/docker/volumes/jenkins_mariadb_data/
