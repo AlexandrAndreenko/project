@@ -1,6 +1,6 @@
     - name: Create a directory wordpress
       file:
-        path: /data/wordpress
+        path: /data/backhttpd
         state: directory
         owner: jenkins
         group: jenkins
@@ -8,14 +8,14 @@
 
     - name: Create a directory mariadb
       file:
-        path: /data/mariadb
+        path: /data/backbd
         state: directory
         owner: jenkins
         group: jenkins
         mode: 0755
 
     - name: Make Backup files
-      shell: sudo rsync -avH /var/lib/docker/volumes/jenkins_wordpress_data/ /data/wordpress/
+      shell: sudo rsync -avH /var/lib/docker/volumes/jenkins_wordpress_data/ /data/backhttpd/
     #  become: yes
     #  synchronize:
     #    src: /var/lib/docker/volumes/jenkins_wordpress_data/
@@ -23,7 +23,7 @@
        
 
     - name: Make Backup BD
-      shell: sudo rsync -avH /var/lib/docker/volumes/jenkins_mariadb_data/ /data/mariadb/
+      shell: sudo rsync -avH /var/lib/docker/volumes/jenkins_mariadb_data/ /data/backbd/
       #become: yes
       #synchronize:
       #  src: /var/lib/docker/volumes/jenkins_mariadb_data/

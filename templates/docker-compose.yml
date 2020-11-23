@@ -26,6 +26,6 @@ services:
       - wordpress_data:/bitnami
 volumes:
   mariadb_data:
-    driver: local
+    - /data/mariadb/
   wordpress_data:
-    driver: local      
+    - /data/wordpress/    
