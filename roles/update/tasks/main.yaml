@@ -20,7 +20,7 @@
     - name: Make Backup BD
       shell: sudo rsync -avH /data/mariadb/mariadb/ /data/backbd/
 
-    - name: Remove stop containers
+    - name: Stoping containers
       shell: docker-compose stop wordpress
       args:
         chdir: /var/lib/jenkins
