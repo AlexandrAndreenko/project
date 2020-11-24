@@ -9,7 +9,7 @@
 - name: Remove old files
   shell: rm -rf /data/wordpress/wordpress/*
 
-- name: copy bakup:
+- name: copy backup
   shell: rsync -avH /data/backhttpd/ /data/wordpress/wordpress/
 
 - name: Restor docker compose
