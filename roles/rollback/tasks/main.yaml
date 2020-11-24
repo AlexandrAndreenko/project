@@ -10,7 +10,7 @@
   shell: rm -rf /data/wordpress/wordpress/*
 
 - name: copy bakup:
-  shell: rsyn -avH /data/backhttpd/ /data/wordpress/wordpress/
+  shell: rsync -avH /data/backhttpd/ /data/wordpress/wordpress/
 
 - name: Restor docker compose
   copy:

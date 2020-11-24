@@ -39,7 +39,11 @@
     - name: Run docker-compose up
       shell: docker-compose up -d
       args:
-        chdir: /var/lib/jenkins    
+        chdir: /var/lib/jenkins 
+
+    - name: Pause for runing app
+      pause:
+        seconds: 60       
 
     - name: Check Status
       block:
