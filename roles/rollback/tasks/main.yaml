@@ -1,0 +1,11 @@
+- name: Checks if it works
+  uri:
+    url: "http://192.168.100.11:8080"
+    return_content: yes
+    register: out
+    failed_when: "'Hello world' not in out.content"
+    become: no
+
+- name: Show content
+  debug:
+    msg: "out.status"    

@@ -5,24 +5,24 @@ pipeline {
     agent { 
         label 'master'
         }
-
+        
     
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
         timestamps()
     }
     stages {
-        stage("Check Host") {
+        stage("Check host") {
             steps {
                 sh 'hostname'
                 sh 'uptime'
             }
         }
-        stage('Install docker to target') {
+        stage('Update') {
             steps {
                 ansiblePlaybook(
                     inventory: 'hosts.yaml',
-                    playbook: 'deploy.yaml'
+                    playbook: 'rollback.yaml'
                 )
             }    
          }
@@ -35,5 +35,4 @@ pipeline {
             slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
     }
-}    
-
+}  
