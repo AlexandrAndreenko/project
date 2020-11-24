@@ -1,11 +1,23 @@
-- name: Checks if it works
-  uri:
-    url: "http://192.168.100.11:8080"
-    return_content: yes
-    register: out
-    failed_when: "'Hello world' not in out.content"
-    become: no
+- name: Stoping containers
+  shell: docker-compose stop wordpress
+  args:
+    chdir: /var/lib/jenkins
 
-- name: Show content
-  debug:
-    msg: "out.status"    
+- name: Remove stop containers
+  shell: docker rm jenkins_wordpress_1
+
+- name: Remove old files
+  shell: rm -rf /data/wordpress/wordpress/*
+
+- name: copy bakup:
+  shell: rsyn -avH /data/backhttpd/ /data/wordpress/wordpress/
+
+- name: Restor docker compose
+  copy:
+    src: docker-compose.yml
+    ddst: /var/lib/jenkins/
+
+- name: Run docker-compose up
+  shell: docker-compose up -d
+  args:
+    chdir: /var/lib/jenkins

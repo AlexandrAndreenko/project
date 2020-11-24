@@ -41,3 +41,27 @@
       args:
         chdir: /var/lib/jenkins    
 
+    - name: Check Status
+      block:
+        - name: Check content to the site
+          uri:
+            url: "http://192.168.100.11:8080"
+            return_content: yes
+          register: out
+          failed_when: "'WordPress' not in out.content"
+        - name: Print out
+          debug:
+            msg: "{{ out }}"
+      rescue:
+        - name: Notify in Slack 
+          slack:
+            username: 'Ansible sender'
+            color: danger
+            icon_url: https://logos-download.com/wp-content/uploads/2016/10/Ansible_logo.png
+            token: "TFBPBNB2L/B01FCBWEN5B/HMopSvqM5zsMX6Csum7egYty"
+            channel: "#deploy_project"
+            msg: "Update is failed"
+
+        - name: Rollback to previous version app
+          include_role:
+            name: rollback
