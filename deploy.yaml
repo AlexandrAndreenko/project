@@ -1,10 +1,6 @@
 ---
 - hosts: all
   become: yes
-  vars:
-    name_cms: "wordpress"
-    name_db: "mariadb"
-    name_docker_net: "wordpress-network" 
   roles:
     - docker  
 
@@ -36,13 +32,6 @@
         - http
         - https
 
-    #- name: Create a volume for db
-    #  docker_volume:
-    #    name: mariadb_data
-
-    #- name: Create a volume for httpd
-    #  docker_volume:
-    #    name: wordpress_data
     - name: Create a directory wordpress
       file:
         path: /data/wordpress

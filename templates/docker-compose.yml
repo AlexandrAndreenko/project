@@ -24,8 +24,4 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
       - /data/wordpress:/bitnami
-#volumes:
-#  mariadb_data:
-#    - /data/mariadb/
-#  wordpress_data:
-#    - /data/wordpress/    
+  
