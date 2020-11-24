@@ -12,7 +12,7 @@ pipeline {
         timestamps()
     }
     stages {
-        stage("First step") {
+        stage("Check host") {
             steps {
                 sh 'hostname'
                 sh 'uptime'
