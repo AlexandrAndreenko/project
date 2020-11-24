@@ -15,7 +15,7 @@
 - name: Restor docker compose
   copy:
     src: docker-compose.yml
-    ddst: /var/lib/jenkins/
+    dest: /var/lib/jenkins/
 
 - name: Run docker-compose up
   shell: docker-compose up -d
