@@ -13,9 +13,9 @@
   shell: rsync -avH /data/backhttpd/ /data/wordpress/wordpress/
 
 - name: Run docker-compose up
-  shell: docker-compose up -d
+  shell: docker-compose -f docker-compose-main.yml up -d
   args:
-    chdir: /var/lib/jenkins/docker-compose-main.yml
+    chdir: /var/lib/jenkins/
 
 - name: Pause for runing app
   pause:
