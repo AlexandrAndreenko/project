@@ -12,12 +12,30 @@
 - name: copy backup
   shell: rsync -avH /data/backhttpd/ /data/wordpress/wordpress/
 
-- name: Restor docker compose
-  copy:
-    src: docker-compose.yml
-    dest: /var/lib/jenkins/
-
 - name: Run docker-compose up
   shell: docker-compose up -d
   args:
-    chdir: /var/lib/jenkins
+    chdir: /var/lib/jenkins/docker-compose-main.yml
+
+- name: Pause for runing app
+  pause:
+    seconds: 60
+
+- name: Check content to the site
+  uri:
+    url: "http://192.168.100.11:8080"
+    return_content: yes
+  register: out
+  failed_when: "'Wordpress' not in out.content"
+- name: Print out
+  debug:
+    msg: "{{ out }}"
+
+- name: Notify in Slack if rollback complete
+  slack:
+    username: 'Ansible sender'
+    color: good
+    icon_url: https://logos-download.com/wp-content/uploads/2016/10/Ansible_log$
+    token: "TFBPBNB2L/B01FCBWEN5B/HMopSvqM5zsMX6Csum7egYty"
+    channel: "#deploy_project"
+    msg: "Rollback"    
