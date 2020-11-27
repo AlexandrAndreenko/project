@@ -31,7 +31,8 @@
       with_items:
         - http
         - https
-
+      notify:  
+        - restart docker
     - name: Create a directory wordpress
       file:
         path: /data/wordpress
