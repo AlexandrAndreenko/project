@@ -44,5 +44,4 @@
     enabled: yes
   notify:
     - restart docker
-  
   become: yes
