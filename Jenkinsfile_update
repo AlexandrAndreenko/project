@@ -22,7 +22,8 @@ pipeline {
             steps {
                 ansiblePlaybook(
                     inventory: 'hosts.yaml',
-                    playbook: 'update.yaml'
+                    playbook: 'update.yaml',
+                    disableHostKeyChecking: true
                 )
             }    
          }
