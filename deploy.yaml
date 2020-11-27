@@ -31,8 +31,12 @@
       with_items:
         - http
         - https
-      notify:  
-        - restart docker
+
+    - name: Restart service docker
+      systemd:
+        state: restarted
+        name: docker
+
     - name: Create a directory wordpress
       file:
         path: /data/wordpress
