@@ -21,9 +21,12 @@
       shell: sudo rsync -avH /data/mariadb/mariadb/ /data/backbd/
 
     - name: Stoping containers
-      shell: docker-compose -f docker-compose-main.yml down wordpress
+      shell: docker-compose -f docker-compose-main.yml stop wordpress
       args:
-        chdir: /var/lib/jenkins/
+        chdir: /var/lib/jenkins
+
+    - name: Remove stop containers
+      shell: docker rm jenkins_wordpress_1
 
     - name: Copy compose
       template:
