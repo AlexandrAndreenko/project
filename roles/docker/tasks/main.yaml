@@ -26,13 +26,14 @@
   get_url: 
     url : https://github.com/docker/compose/releases/download/1.27.4/docker-compose-Linux-x86_64
     dest: /usr/bin/docker-compose
-    mode: 'u+x,g+x'  
+    #mode: 'u+x,g+x'
+    mode: a+x  
   become: yes   
 
 - name: Enable docker
   shell: |
-    usermod -aG docker $USER
-    chown $USER /var/run/docker.sock
+    usermod -aG docker jenkins
+    chown jenkins /var/run/docker.sock
     systemctl enable docker
   args:
     executable: /bin/bash
