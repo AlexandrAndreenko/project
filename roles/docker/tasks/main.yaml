@@ -42,6 +42,4 @@
     name: docker
     state: started
     enabled: yes
-  notify:
-    - restart docker
   become: yes
